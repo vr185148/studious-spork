@@ -8,6 +8,8 @@ tags:
     description: API to send a whatsapp message
   - name: WhatsApp Service - Webhook
     description: Webhook for processing MO requests.
+  - name: NS MO Processing API
+    description: MO processing 
 
 paths:
   /v1/send:
@@ -55,6 +57,33 @@ paths:
             examples:
               default:
                 $ref: "#/components/examples/WhatsAppServiceMORequest"
+      responses:
+        '201':
+          $ref: '#/components/responses/successful_mo_201'
+        '400':
+          $ref: '#/components/responses/invalidRequest'
+        '401':
+          $ref: '#/components/responses/unauthorized'
+        '500':
+          $ref: '#/components/responses/internalServerError'
+  /mbl/v2/mowhatsapp:
+    post:
+      tags:
+        - NS MO Processing API
+      summary: API to process the MO request received from Whatsapp service
+      operationId: createMOProcessingRequest
+      parameters:
+        - $ref: '#/components/parameters/transactionId'
+        - $ref: '#/components/parameters/Authorization'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WhatsAppMOMessageRequestInfo'
+            examples:
+              default:
+                $ref: "#/components/examples/WhatsAppMOMessageRequestInfo"
       responses:
         '201':
           $ref: '#/components/responses/successful_mo_201'
@@ -194,6 +223,35 @@ components:
           type: string
           description: "message id"
           example: "vy3E72K3Tr7lHxUXe1S776"
+    WhatsAppMOMessageRequestInfo:
+      type: object
+      properties:
+        senderId:
+          type: string
+          description: "sender id"
+          example: "ERp2WG5dG2Gfl9WzcohqP5"
+        messageId:
+          type: string
+          description: "message id"
+          example: "vy3E72K3Tr7lHxUXe1S776"
+        toAddress:
+          type: string
+          description: "to address"
+          example: "+1890890890"
+        fromAddress:
+          type: string
+          description: "from address"
+          example: "+1840359390"
+        messageBody:
+          type: string
+          description: "message content"
+          example: "HELP"
+      required:
+        - senderId
+        - messageId
+        - toAddress
+        - fromAddress
+        - messageBody
     ErrorResponse:
       type: object
       required:
@@ -323,8 +381,8 @@ components:
             sender_id_id: "ERp2WG5dG2Gfl9WzcohqP5"
             message_body: "BAL"
             message_id: "vy3E72K3Tr7lHxUXe1S776"
-            to_address: "468848"
-            from_address: "4809238979"
+            to_address: "+1890890890"
+            from_address: "+1840359390"
           evt-tp: "mo_message_received"
           timestamp: "2020-04-23T20:40:15.613Z"
         event-id: "6OEBYfs3RruOOV2fgdayuQ"
@@ -334,3 +392,11 @@ components:
         status: "Success"
         senderId: "ERp2WG5dG2Gfl9WzcohqP5"
         messageId: "vy3E72K3Tr7lHxUXe1S776"
+    WhatsAppMOMessageRequestInfo:
+      summary: default
+      value:
+        senderId: "ERp2WG5dG2Gfl9WzcohqP5"
+        messageId: "vy3E72K3Tr7lHxUXe1S776"
+        toAddress: "+1890890890"
+        fromAddress: "+1840359390"
+        messageBody: "HELP"

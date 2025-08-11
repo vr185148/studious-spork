@@ -103,7 +103,7 @@ components:
           type: string
           description: "WhatsApp senderID - from number"
           example: "+1890890890"
-        address:
+        toAddress:
           type: string
           description: "WhatsApp to number - end user whatsapp number"
           example: "+1840359390"
@@ -129,7 +129,7 @@ components:
           example: "MFA"
       required:
         - senderId
-        - address
+        - toAddress
         - message
         - telephoneCountryCode
         - fiId
@@ -358,7 +358,7 @@ components:
       summary: default
       value:
         senderId: "+1890890890"
-        address: "+1840359390"
+        toAddress: "+1840359390"
         message: "Hello, this is a test message"
         telephoneCountryCode: "1"
         fiID: "00516"
